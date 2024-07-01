@@ -1,0 +1,14 @@
+{
+    "project": {
+        "project_id": "23616000000008006",
+        "project_name": "hng-stage-one-task"
+    },
+    "features": {
+        "appsail": [
+            {
+                "service_name": "MySpringBootService",
+                "context_path": "appsail"
+            }
+        ]
+    }
+}

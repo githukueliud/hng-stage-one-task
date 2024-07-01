@@ -1,0 +1,38 @@
+{
+  "defaults": {
+    "project": 1,
+    "env": 1
+  },
+  "actives": {
+    "project": 1,
+    "env": 1
+  },
+  "projects": [
+    {
+      "idx": 1,
+      "id": "23616000000008006",
+      "name": "hng-stage-one-task",
+      "domain": {
+        "id": "10083366884",
+        "name": "hng-stage-one-task-856671743.development"
+      },
+      "timezone": "Africa/Nairobi",
+      "env": [
+        {
+          "idx": 1,
+          "id": "856671743",
+          "name": "Development",
+          "type": 3,
+          "env_status": "Active",
+          "project_details": {
+            "project_name": "hng-stage-one-task",
+            "id": "23616000000008006",
+            "project_type": "Live"
+          },
+          "is_default": true,
+          "action_required": false
+        }
+      ]
+    }
+  ]
+}

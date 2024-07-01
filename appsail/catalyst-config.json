@@ -1,0 +1,11 @@
+{
+    "service_name": "MySpringBootService",
+    "type": "java",
+    "build": {
+        "command": "mvn clean install"
+    },
+    "run": {
+        "command": "java -jar hng-stage-one-task-0.0.1-SNAPSHOT.jar"
+    }
+}
+

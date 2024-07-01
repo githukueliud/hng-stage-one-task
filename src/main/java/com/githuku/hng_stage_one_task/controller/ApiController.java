@@ -1,14 +1,12 @@
 package com.githuku.hng_stage_one_task.controller;
 
 
+import com.githuku.hng_stage_one_task.model.ApiModel;
 import com.githuku.hng_stage_one_task.model.location.IpAddressInfo;
 import com.githuku.hng_stage_one_task.model.weather.WeatherResponse;
 import com.githuku.hng_stage_one_task.services.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -22,8 +20,8 @@ public class ApiController {
 
 
 
-    @GetMapping("/hello/{visitor_name}")
-    public String getApiEndpoint(@PathVariable String visitor_name) {
+    @GetMapping("/hello")
+    public ApiModel getApiEndpoint(@RequestParam String visitor_name) {
         String ipAddress = "";
         try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
             ipAddress = s.next();
@@ -39,7 +37,14 @@ public class ApiController {
         double lat = ipAddressInfo.getLatitude();
         double lon = ipAddressInfo.getLongitude();
         double temp = getWeatherResponse(lat, lon).getMain().getTemp();
-        return "hello " + visitor_name + " your ip address is " + ipAddress + " you live in " + city + " temperature today is " + Double.toString(temp);
+        //cleanse the leading and trailing " from the visitor's name
+        if(visitor_name.startsWith("\"") || visitor_name.endsWith("\"")) {
+            // Remove leading and trailing double quotes
+            visitor_name = visitor_name.replaceAll("^\"|\"$", "");
+        }
+        String greeting = "Hello, " + visitor_name + "!, the temperature is " + Double.toString(temp) + " degrees Celsius in " + city;
+
+        return new ApiModel(ipAddress, city, greeting);
     }
 
     private IpAddressInfo getIpAddressInfo(String ipAddress) {
