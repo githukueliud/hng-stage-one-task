@@ -22,6 +22,11 @@ public class ApiController {
     private ApiService apiService;
 
 
+    @GetMapping("/greet")
+    public String greeting() {
+        return "hello from greetings";
+    }
+
 
     @GetMapping("/hello")
     public ApiModel getApiEndpoint(@RequestParam String visitor_name) {
