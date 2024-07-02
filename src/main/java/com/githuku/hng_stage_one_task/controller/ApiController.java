@@ -3,6 +3,7 @@ package com.githuku.hng_stage_one_task.controller;
 
 import com.githuku.hng_stage_one_task.model.ApiModel;
 import com.githuku.hng_stage_one_task.model.location.IpAddressInfo;
+import com.githuku.hng_stage_one_task.model.response.NewWeatherResponse;
 import com.githuku.hng_stage_one_task.model.weather.WeatherResponse;
 import com.githuku.hng_stage_one_task.services.ApiService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +35,8 @@ public class ApiController {
         String ipAddress = "";
         if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
             ipAddress = xForwardedFor.split(",")[0];
+        } else {
+            ipAddress = request.getRemoteAddr();
         }
 //        try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
 //            ipAddress = s.next();
@@ -47,10 +50,13 @@ public class ApiController {
         //https://ipgeolocation.abstractapi.com/v1/api_key=YOUR_UNIQUE_API_KEY&ip_address=166.171.248.255
 
         IpAddressInfo ipAddressInfo = getIpAddressInfo(ipAddress);
-        String city = ipAddressInfo.getCity();
+        //String city = ipAddressInfo.getCity();
         double lat = ipAddressInfo.getLatitude();
         double lon = ipAddressInfo.getLongitude();
-        double temp = getWeatherResponse(lat, lon).getMain().getTemp();
+        NewWeatherResponse weatherResponse = getWeatherResponse(lat, lon);
+        String city = weatherResponse.getLocation().getName();
+        double temp = weatherResponse.getCurrent().getTemp_c();
+        //double temp = getWeatherResponse(lat, lon).getMain().getTemp();
         //cleanse the leading and trailing " from the visitor's name
         if(visitor_name.startsWith("\"") || visitor_name.endsWith("\"")) {
             // Remove leading and trailing double quotes
@@ -65,7 +71,7 @@ public class ApiController {
         return apiService.getJsonFromEndpoint(ipAddress);
     }
 
-    private WeatherResponse getWeatherResponse(Double lat, Double lon) {
+    private NewWeatherResponse getWeatherResponse(Double lat, Double lon) {
         return apiService.getWeatherInfo(lat, lon);
     }
 
