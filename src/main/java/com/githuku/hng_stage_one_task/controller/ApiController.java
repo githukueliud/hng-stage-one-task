@@ -8,6 +8,9 @@ import com.githuku.hng_stage_one_task.services.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -26,8 +29,12 @@ public class ApiController {
         try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
             ipAddress = s.next();
             System.out.println("My current IP address is " + ipAddress);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            // Log the error with a meaningful message
+            System.err.println("URL is malformed: " + e.getMessage());
+        } catch (IOException e) {
+            // Log the error with a meaningful message
+            System.err.println("IOException occurred: " + e.getMessage());
         }
         //apiService.getJsonFromEndpoint("https://ipgeolocation.abstractapi.com/v1/api_key=33f00175f1f74da1869deacbfaa64ed4&ip_address={ipAddress}");
         //https://ipgeolocation.abstractapi.com/v1/api_key=YOUR_UNIQUE_API_KEY&ip_address=166.171.248.255
