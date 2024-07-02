@@ -5,6 +5,7 @@ import com.githuku.hng_stage_one_task.model.ApiModel;
 import com.githuku.hng_stage_one_task.model.location.IpAddressInfo;
 import com.githuku.hng_stage_one_task.model.weather.WeatherResponse;
 import com.githuku.hng_stage_one_task.services.ApiService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +30,21 @@ public class ApiController {
 
 
     @GetMapping("/hello")
-    public ApiModel getApiEndpoint(@RequestParam String visitor_name) {
+    public ApiModel getApiEndpoint(@RequestParam String visitor_name, @RequestHeader(value = "X-Forwarded-For", required = false) String xForwardedFor, HttpServletRequest request) {
         String ipAddress = "";
-        try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-            ipAddress = s.next();
-            System.out.println("My current IP address is " + ipAddress);
-        } catch (MalformedURLException e) {
-            // Log the error with a meaningful message
-            System.err.println("URL is malformed: " + e.getMessage());
-        } catch (IOException e) {
-            // Log the error with a meaningful message
-            System.err.println("IOException occurred: " + e.getMessage());
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            ipAddress = xForwardedFor.split(",")[0];
+        } else {
+            ipAddress = request.getRemoteAddr();
         }
+//        try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
+//            ipAddress = s.next();
+//            System.out.println("My current IP address is " + ipAddress);
+//        } catch (MalformedURLException e) {
+//            System.err.println("URL is malformed: " + e.getMessage());
+//        } catch (IOException e) {
+//            System.err.println("IOException occurred: " + e.getMessage());
+//        }
         //apiService.getJsonFromEndpoint("https://ipgeolocation.abstractapi.com/v1/api_key=33f00175f1f74da1869deacbfaa64ed4&ip_address={ipAddress}");
         //https://ipgeolocation.abstractapi.com/v1/api_key=YOUR_UNIQUE_API_KEY&ip_address=166.171.248.255
 
