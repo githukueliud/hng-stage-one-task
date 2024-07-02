@@ -34,8 +34,6 @@ public class ApiController {
         String ipAddress = "";
         if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
             ipAddress = xForwardedFor.split(",")[0];
-        } else {
-            ipAddress = request.getRemoteAddr();
         }
 //        try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
 //            ipAddress = s.next();
